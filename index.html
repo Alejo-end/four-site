@@ -79,7 +79,7 @@
         <p class="flow-note">Everything from the take to the sends runs once per track. The tape loop is softcut, which runs outside SuperCollider, so it costs the engine nothing.</p>
         <h3>The engine</h3>
         <dl class="facts">
-          <div><dt>Our own UGens</dt><dd>FourPV, FourWarp, FourRead, FourGrain, FourDelay, FourBBD, FourRoom and FourTanh, in one plugin that four installs itself on its first start. Without it, four falls back to stock UGens and still plays.</dd></div>
+          <div><dt>Our own UGens</dt><dd>FourPV, FourWarp, FourRead, FourGrain, FourDelay, FourBBD, FourRoom, FourTanh and FourCloud (Mutable Instruments Clouds, from the mi-UGens port), in one plugin that four installs itself on its first start. Without it, four falls back to stock UGens and still plays.</dd></div>
           <div><dt>What it costs</dt><dd>Measured on a Raspberry Pi 4 with the reverb and delay on: four PLAY tracks take 17% of the audio thread, four GRAIN tracks 19% and four PV tracks 29%.</dd></div>
           <div><dt>Exact where it can be</dt><dd>At pitch 1 and speed 1, PLAY gives the take back sample for sample, and so do WARP and PV with the plugin. A track leaves the engine at the level it was recorded.</dd></div>
           <div><dt>Tested</dt><dd>The C++ cores have their own test program. An offline check renders the real engine on a Mac and holds it to a list of measured targets. Some still fail, and the list says which.</dd></div>
