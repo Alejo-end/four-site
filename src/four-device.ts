@@ -5,56 +5,71 @@
 //   device.shift = 0..1      slides the case to the left half (desktop guide)
 //   device.screen = canvas   the live screen texture (a <four-screen> canvas)
 //
-// The model is the case's CAD assembly (public/model/case.glb, metres, Y up,
-// screen on +Y, ports on -Z). Top-level nodes are grouped by name, and each
-// group flies along the case's own up axis.
+// The model is the case's CAD assembly (public/model/case.glb). The case's own
+// axes are read from its parts. It comes apart the way it is built: layers
+// stacked along the up axis with a gap between them, and it goes together
+// from the inside out, one layer at a time on each side of the board, so a
+// part only ever moves toward parts that are already home. Nothing passes
+// through anything.
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
-type Group = "bottom" | "batt" | "board" | "screen" | "shell" | "caps" | "lid";
+// The layers, from the board outward. "board" never moves. Below the board:
+// the film and thermal pad, then the heat sheet (a cover draped over the
+// battery, open at the bottom), then the foam and the battery that go up into
+// it, then the bottom plate with its feet. Above: the screen module, the shell
+// (with its window and the slider), then the knobs and key caps. The order was
+// checked by casting rays along the up axis: no layer meets a part that is
+// already home on its way in.
+const BELOW = ["film", "sheet", "foam", "battery", "bottom"] as const;
+const ABOVE = ["screen", "shell", "caps"] as const;
+type Layer = (typeof BELOW)[number] | (typeof ABOVE)[number] | "board" | "lid";
 
-// which group a top-level node belongs to (after the earlier viewers of the case)
-function groupOf(name: string): Group {
+function layerOf(name: string): Layer {
   if (/^Clear_lid/i.test(name)) return "lid";
+  if (/^(Thermal_pad|Heat_sheet_film)/i.test(name)) return "film";
+  if (/^Battery_foam/i.test(name)) return "foam";
+  if (/^Battery(?!_)/i.test(name)) return "battery";
+  if (/^Heat_sheet(?!_)/i.test(name)) return "sheet";
   if (/^(Bottom_plate|Foot_)/i.test(name)) return "bottom";
-  if (/^(Battery|Heat_sheet|Thermal_pad)/i.test(name)) return "batt";
   if (/^(OLED|Screen_(pcb|connector|flex|screw))/i.test(name)) return "screen";
   if (/^(Shell|Screen_window|TRS_slider)/i.test(name)) return "shell";
-  if (/^(Knob_|Pointer_|Cap_)/i.test(name)) return "caps";
+  if (/^(Knob_|Cap_)/i.test(name)) return "caps";
   return "board";
 }
-
-// how far each group sits from home when exploded (mm along the case's up axis),
-// and the window of the assembly (0..1) in which it lands
-const LIFT: Record<Group, number> = { bottom: -78, batt: -40, board: 0, screen: 46, shell: 92, caps: 150, lid: 0 };
-const LAND: Record<Group, [number, number]> = {
-  bottom: [0.0, 0.42],
-  batt: [0.08, 0.5],
-  board: [0.0, 0.1],
-  screen: [0.3, 0.68],
-  shell: [0.45, 0.85],
-  caps: [0.62, 1.0],
-  lid: [0, 1],
-};
+const GAP = 12; // mm of air between layers when apart
+// The bottom plate's back panel has holes that the board's connectors sit in,
+// so it cannot rise straight up: it rises 2 mm behind its place, then slides
+// forward onto the connectors. 2 mm clears them, and its corners still clear
+// the shell's back wall (both checked with rays along the paths).
+const BACK: Partial<Record<Layer, number>> = { bottom: 2 };
 
 const clamp = (x: number, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const span = (p: number, a: number, b: number) => clamp((p - a) / (b - a));
 const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
-// lands with a short, soft settle
-const land = (t: number) => {
-  const e = easeInOut(t);
-  return e + Math.sin(Math.PI * t) * 0.025 * (1 - t);
-};
+// lands softly, and never past home: an overshoot would push a part into the one it meets
+const land = (t: number) => 1 - Math.pow(1 - easeInOut(t), 1.6);
 
 // phases of the whole progress
 const P_ASM: [number, number] = [0.06, 0.58];
 const P_TURN: [number, number] = [0.5, 0.82];
 const P_ON: [number, number] = [0.8, 0.92];
 
-type Part = { obj: THREE.Object3D; group: Group; home: THREE.Vector3; homeQ: THREE.Quaternion; jitter: THREE.Euler; lift: number /* mm */ };
+type Part = {
+  obj: THREE.Object3D;
+  layer: Layer;
+  home: THREE.Vector3;
+  homeQ: THREE.Quaternion;
+  jitter: THREE.Euler; // a small turn while apart, only for knobs and caps
+  offset: number; // mm along the up axis when apart
+  back: number; // mm toward the back when apart, closed by a final slide
+  lo: number; // its span along the up axis when home, mm
+  hi: number;
+  window: [number, number]; // the part of the assembly (0..1) in which its layer lands
+};
 
 export class FourDevice extends HTMLElement {
   private renderer: THREE.WebGLRenderer | null = null;
@@ -67,9 +82,9 @@ export class FourDevice extends HTMLElement {
   private glowMat: THREE.MeshBasicMaterial | null = null;
   private tex: THREE.CanvasTexture | null = null;
   private upPerMm = new THREE.Vector3(0, 0.001, 0); // the case's up axis, in the parts' frame
+  private backPerMm = new THREE.Vector3(0, 0, -0.001); // toward the ports, in the parts' frame
   private key!: THREE.DirectionalLight;
   private axes = { R: new THREE.Vector3(1, 0, 0), B: new THREE.Vector3(0, 0, -1), U: new THREE.Vector3(0, 1, 0) };
-  private rExploded = 160;
   private rAssembled = 75;
   private _progress = 0;
   private _shift = 0;
@@ -233,35 +248,92 @@ export class FourDevice extends HTMLElement {
 
     // 1 mm along U, expressed in the parts' parent frame
     const toRoot = new THREE.Matrix4().copy(root.matrixWorld).invert().multiply(this.model.matrixWorld);
-    this.upPerMm.copy(U).multiplyScalar(0.001).applyMatrix3(new THREE.Matrix3().setFromMatrix4(toRoot));
+    const lin = new THREE.Matrix3().setFromMatrix4(toRoot);
+    this.upPerMm.copy(U).multiplyScalar(0.001).applyMatrix3(lin);
+    this.backPerMm.copy(B).multiplyScalar(0.001).applyMatrix3(lin);
+
+    // each part's span along U when home, in mm
+    const span = (o: THREE.Object3D) => {
+      const b = new THREE.Box3().setFromObject(o);
+      const c = [b.min, b.max];
+      let lo = Infinity, hi = -Infinity;
+      for (const x of c) for (const y of c) for (const z of c) {
+        const d = new THREE.Vector3(x.x, y.y, z.z).dot(U);
+        lo = Math.min(lo, d);
+        hi = Math.max(hi, d);
+      }
+      return [lo, hi] as const;
+    };
+    const byLayer = new Map<Layer, THREE.Object3D[]>();
+    for (const obj of parts) {
+      const l = layerOf(obj.name);
+      if (l === "lid") obj.visible = false;
+      else this.material(obj);
+      byLayer.set(l, [...(byLayer.get(l) ?? []), obj]);
+    }
+    const layerSpan = (l: Layer) => {
+      let lo = Infinity, hi = -Infinity;
+      for (const o of byLayer.get(l) ?? []) {
+        const [a, b] = span(o);
+        lo = Math.min(lo, a);
+        hi = Math.max(hi, b);
+      }
+      return [lo, hi] as const;
+    };
+    const [boardLo, boardHi] = layerSpan("board");
+    // apart: each layer clears the one inside it by GAP
+    const offset = new Map<Layer, number>();
+    let edge = boardLo;
+    for (const l of BELOW) {
+      if (!byLayer.has(l)) continue;
+      const [lo, hi] = layerSpan(l);
+      const o = edge - GAP - hi;
+      offset.set(l, o);
+      edge = lo + o;
+    }
+    edge = boardHi;
+    for (const l of ABOVE) {
+      if (!byLayer.has(l)) continue;
+      const [lo, hi] = layerSpan(l);
+      const o = edge + GAP - lo;
+      offset.set(l, o);
+      edge = hi + o;
+    }
+    // together: inside out, one layer at a time on each side
+    const windows = new Map<Layer, [number, number]>();
+    const order = (list: readonly Layer[]) => {
+      const present = list.filter((l) => byLayer.has(l));
+      present.forEach((l, k) => windows.set(l, [k / present.length, (k + 1) / present.length]));
+    };
+    order(BELOW);
+    order(ABOVE);
 
     let i = 0;
-    for (const obj of parts) {
-      const group = groupOf(obj.name);
-      if (group === "lid") {
-        obj.visible = false;
-        continue;
+    for (const [layer, objs] of byLayer) {
+      if (layer === "lid") continue;
+      for (const obj of objs) {
+        const seed = Math.sin(++i * 12.9898) * 43758.5453;
+        const r = (k: number) => Math.sin(seed * k);
+        const [lo, hi] = span(obj);
+        this.parts.push({
+          obj,
+          layer,
+          lo,
+          hi,
+          home: obj.position.clone(),
+          homeQ: obj.quaternion.clone(),
+          jitter: layer === "caps" ? new THREE.Euler(r(1.3) * 0.35, r(2.1) * 0.6, r(3.7) * 0.35) : new THREE.Euler(),
+          offset: offset.get(layer) ?? 0,
+          back: BACK[layer] ?? 0,
+          window: windows.get(layer) ?? [0, 0],
+        });
       }
-      this.material(obj);
-      const seed = Math.sin(++i * 12.9898) * 43758.5453;
-      const r = (k: number) => Math.sin(seed * k);
-      const loose = group === "caps" || group === "batt" || group === "bottom" ? 1 : 0.35;
-      this.parts.push({
-        obj,
-        group,
-        home: obj.position.clone(),
-        homeQ: obj.quaternion.clone(),
-        jitter: new THREE.Euler(r(1.3) * 0.22 * loose, r(2.1) * 0.35 * loose, r(3.7) * 0.22 * loose),
-        // parts of one group spread a little in height, so a group is not a slab
-        lift: LIFT[group] + (group === "caps" ? r(4.3) * 14 : group === "board" ? 0 : r(5.9) * 6),
-      });
     }
     this.addScreen(find(/^OLED/i) ?? find(/^Screen_window/i), find(/^Screen_window/i));
 
     const shell = boxOf(find(/^Shell/i)) ?? new THREE.Box3().setFromObject(root);
     const size = shell.getSize(new THREE.Vector3());
     this.rAssembled = Math.abs(size.dot(R)) / 2 + 8;
-    this.rExploded = Math.max(this.rAssembled, (LIFT.caps - LIFT.bottom) / 2 + 34);
     this.pivot.quaternion.copy(savedQ);
     this.pivot.position.copy(savedP);
     this.resolveReady();
@@ -363,14 +435,30 @@ export class FourDevice extends HTMLElement {
     const on = easeOut(span(p, ...P_ON));
 
     // parts: fly home in their windows, with a little tumble while apart
+    let lowNow = Infinity, highNow = -Infinity;
     for (const part of this.parts) {
-      const k = land(span(asm, ...LAND[part.group]));
+      const [w0, w1] = part.window;
+      // a part with a slide rises in the first three quarters of its window, then slides home
+      const wr = part.back ? w0 + (w1 - w0) * 0.75 : w1;
+      const k = part.offset ? land(span(asm, w0, wr)) : 1;
+      const slide = part.back ? easeInOut(span(asm, wr, w1)) : 1;
       const apart = 1 - k;
-      part.obj.position.copy(part.home).addScaledVector(this.upPerMm, part.lift * apart);
+      part.obj.position
+        .copy(part.home)
+        .addScaledVector(this.upPerMm, part.offset * apart)
+        .addScaledVector(this.backPerMm, part.back * (1 - slide));
+      lowNow = Math.min(lowNow, part.lo + part.offset * apart);
+      highNow = Math.max(highNow, part.hi + part.offset * apart);
+      // a knob or cap turns a little while apart, and is square by the time it is near
+      const turnK = apart * apart;
       part.obj.quaternion
         .copy(part.homeQ)
-        .multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(part.jitter.x * apart, part.jitter.y * apart, part.jitter.z * apart)));
+        .multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(part.jitter.x * turnK, part.jitter.y * turnK, part.jitter.z * turnK)));
     }
+    // the camera frames the stack as it is now: centred, and as tall as it is
+    if (!this.parts.length) lowNow = highNow = 0;
+    this.model.position.copy(this.axes.U).multiplyScalar(-(lowNow + highNow) / 2);
+    const stackR = Math.max(this.rAssembled, (highNow - lowNow) / 2 + 20);
 
     // the case: hero angle with a slow drift, turning to face you
     const idle = 1 - span(p, 0, 0.3);
@@ -388,7 +476,7 @@ export class FourDevice extends HTMLElement {
     this.pivot.position.y = Math.sin(t * 0.6) * 1.5 * idle;
 
     // camera distance: fit the exploded stack, then the assembled case
-    const fit = THREE.MathUtils.lerp(this.rExploded, this.rAssembled, easeInOut(clamp(asm * 1.1)));
+    const fit = stackR;
     const vFov = THREE.MathUtils.degToRad(this.camera.fov);
     const hFov = 2 * Math.atan(Math.tan(vFov / 2) * this.camera.aspect);
     const portrait = this.camera.aspect < 1;
