@@ -1,0 +1,25 @@
+{
+  "fps": 15,
+  "width": 128,
+  "height": 64,
+  "clips": [
+    { "id": "intro", "page": "SPLASH", "file": "intro.png", "frames": 24, "loop_start": 24, "caption": "The opening: four bars rise, one for each track, and the name lands on them." },
+    { "id": "take", "page": "TAKE", "file": "take.png", "frames": 60, "loop_start": 9, "caption": "TAKE records track 2 in real time: the write head lays the take down, the seconds count, the IN meter moves. Then the take closes and its window snaps to it." },
+    { "id": "voice_play", "page": "VOICE", "file": "voice_play.png", "frames": 54, "loop_start": 9, "caption": "VOICE in PLAY with erosion: the wave ages in flecks, GEN counts the passes and the bar under it fills as the erosion head crosses the window." },
+    { "id": "voice_grain", "page": "VOICE", "file": "voice_grain.png", "frames": 54, "loop_start": 9, "caption": "VOICE in GRAIN: the cloud of grains sits on the read head, as many and as long as DENSITY and SIZE say, scattered over the stereo field." },
+    { "id": "voice_warp", "page": "VOICE", "file": "voice_warp.png", "frames": 54, "loop_start": 9, "caption": "VOICE in WARP: the time-stretch's overlapped window ghosts behind the wave and wobbles with the warp's randomness." },
+    { "id": "voice_pv", "page": "VOICE", "file": "voice_pv.png", "frames": 54, "loop_start": 9, "caption": "VOICE in PV: the phase vocoder, drawn as spectral columns that drift with the scan." },
+    { "id": "voice_cloud", "page": "VOICE", "file": "voice_cloud.png", "frames": 54, "loop_start": 9, "caption": "VOICE in CLOUD: the Clouds granulator, each grain scattered around the pan." },
+    { "id": "tracks", "page": "TRACKS", "file": "tracks.png", "frames": 57, "loop_start": 9, "caption": "TRACKS, the hub: four tracks, each with its own take, voice, window and level. E2 walks the focus that the other pages edit." },
+    { "id": "tracks_sends", "page": "TRACKS", "file": "tracks_sends.png", "frames": 57, "loop_start": 9, "caption": "TRACKS with K1 held: the sends. A row is where a sound comes from, a column where it goes: another track, the delay or the reverb." },
+    { "id": "tape", "page": "TAPE", "file": "tape.png", "frames": 57, "loop_start": 9, "caption": "TAPE, the loop deck: the reels turn at the tape's rate and the head crosses the loop that was recorded on it." },
+    { "id": "filter", "page": "FILTER", "file": "filter.png", "frames": 54, "loop_start": 9, "caption": "FILTER: the cutoff sweeps down and back up with the resonance high; the curve is the filter's real response." },
+    { "id": "effect", "page": "EFFECT", "file": "effect.png", "frames": 99, "loop_start": 9, "caption": "EFFECT: K3 steps the slot through CHORUS, FLANGE, WOBBLE, RESON, RING and ECHO; each draws the way it moves the sound." },
+    { "id": "delay", "page": "DELAY", "file": "delay.png", "frames": 54, "loop_start": 9, "caption": "DELAY: the onset and its echoes, as far apart as the time and as many as the feedback lets through." },
+    { "id": "reverb", "page": "REVERB", "file": "reverb.png", "frames": 51, "loop_start": 9, "caption": "REVERB: the tracks that send stand at the corners; each pulse spreads through the room's four squares, and shimmer motes climb off the outer one." },
+    { "id": "mix", "page": "MIX", "file": "mix.png", "frames": 54, "loop_start": 9, "caption": "MIX, the console: the input meter, the engine deck and the tape deck at their real gains across the crossfade, and the master meter." },
+    { "id": "pads", "page": "PADS", "file": "pads.png", "frames": 49, "loop_start": 9, "caption": "PADS: the take in eight slices. The sequencer steps through them; the pad it plays lights and its step stands tall." },
+    { "id": "motion", "page": "MOTION", "file": "motion.png", "frames": 54, "loop_start": 9, "caption": "MOTION: a recorded gesture plays back on its lanes, and the modulators below swing their knobs; a dot shows where each one is now." },
+    { "id": "scene", "page": "SCENE", "file": "scene.png", "frames": 54, "loop_start": 9, "caption": "SCENE: eight slots of stored states. E3 morphs the sound from where it is toward the selected slot, and back." }
+  ]
+}

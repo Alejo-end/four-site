@@ -1,0 +1,170 @@
+/* four: dark studio. The case's anodised grey sets the room, and the screen's
+   warm white is the only light colour on the page. */
+:root {
+  --sweep-in: #1c1e23;   /* the studio sweep behind the case */
+  --sweep-out: #060708;
+  --lit: #f6ecd6;        /* the OLED's lit pixel */
+  --ink: #d3cdc1;        /* body text, warm like the key caps */
+  --mute: #8c887f;
+  --cap: #e6e0d2;
+  --rule: rgb(246 236 214 / 0.12);
+  --gutter: 20px;
+  --measure: 34rem;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--sweep-out); }
+body {
+  margin: 0;
+  min-height: 100svh;
+  color: var(--ink);
+  background: radial-gradient(120% 80% at 50% 38%, var(--sweep-in), var(--sweep-out) 70%) fixed;
+  font: 400 17px/1.55 "Hanken Grotesk Variable", system-ui, sans-serif;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: var(--lit); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+:focus-visible { outline: 2px solid var(--lit); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* pixel type: four's own font, one SVG unit per font pixel */
+[data-px] { display: inline-block; line-height: 0; color: var(--lit); }
+.px-svg { height: 100%; width: auto; display: block; }
+
+/* the case: one fixed canvas behind the page */
+four-device { position: fixed; inset: 0; z-index: 0; display: block; transition: opacity 0.4s; }
+four-device canvas { width: 100%; height: 100%; display: block; }
+.poster { display: none; }
+.no-webgl .poster {
+  display: block; position: fixed; inset: 0; width: 100%; height: 100%;
+  object-fit: contain; padding: 15svh var(--gutter) 30svh; z-index: 0;
+}
+main { position: relative; z-index: 1; }
+
+/* the stage: tall, so scrolling it drives the assembly */
+#stage { height: 560svh; }
+.stage-sticky { position: sticky; top: 0; height: 100svh; pointer-events: none; }
+.hero-copy {
+  position: absolute; left: var(--gutter); right: var(--gutter); bottom: max(28px, env(safe-area-inset-bottom));
+  max-width: var(--measure);
+}
+.wordmark { margin: 0 0 18px; height: 54px; }
+.wordmark [data-px] { height: 100%; filter: drop-shadow(0 0 18px rgb(246 236 214 / 0.35)); }
+.lede { margin: 0; font-size: 1.1rem; line-height: 1.5; color: var(--ink); text-wrap: pretty; }
+.cue { margin: 22px 0 0; font-size: 0.85rem; color: var(--mute); }
+.cue::after {
+  content: ""; display: inline-block; width: 1px; height: 26px; margin-left: 12px; vertical-align: middle;
+  background: linear-gradient(var(--lit), transparent); animation: cue 2.4s ease-in-out infinite;
+}
+@keyframes cue { 0%, 100% { transform: scaleY(0.3); transform-origin: top; opacity: 0.4; } 50% { transform: scaleY(1); opacity: 1; } }
+.note {
+  position: absolute; left: var(--gutter); right: var(--gutter); bottom: 32px; margin: 0;
+  max-width: var(--measure); font-size: 1rem; color: var(--ink); opacity: 0; visibility: hidden; text-wrap: pretty;
+}
+.note-on { font-size: 1.25rem; color: var(--lit); }
+
+/* the guide */
+#guide { position: relative; }
+.guide-screen {
+  position: sticky; top: 0; z-index: 2;
+  padding: max(14px, env(safe-area-inset-top)) var(--gutter) 12px;
+  background: var(--sweep-out);
+  display: grid; justify-items: end;
+}
+.guide-screen > .bezel { justify-self: stretch; }
+/* the text slides under the screen through a short fade */
+.guide-screen::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 28px;
+  background: linear-gradient(var(--sweep-out), transparent); pointer-events: none;
+}
+.bezel {
+  padding: 10px; border-radius: 10px; background: #0b0c0e;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.05), 0 0 50px -12px rgb(246 236 214 / 0.22), 0 24px 40px -24px #000;
+}
+.bezel four-screen { border-radius: 2px; cursor: pointer; }
+.focus-btn {
+  margin-top: 10px; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--rule);
+  background: rgb(246 236 214 / 0.04); color: var(--ink); font: inherit; font-size: 0.85rem; cursor: pointer;
+}
+.focus-btn:hover { border-color: rgb(246 236 214 / 0.3); }
+.guide-text { padding: 8px var(--gutter) 0; }
+.guide-intro { max-width: var(--measure); margin: 24px 0 48px; }
+.guide-intro h2, .moves h2, #outro h2 {
+  font-size: 1.45rem; line-height: 1.2; font-weight: 600; letter-spacing: -0.01em; color: var(--lit); margin: 0 0 12px;
+}
+.guide-intro p { margin: 0; color: var(--ink); }
+
+.page { max-width: var(--measure); min-height: 72svh; padding: 28px 0 56px; border-top: 1px solid var(--rule); }
+.page h2 { height: 30px; margin: 0 0 18px; }
+.page h2 [data-px] { height: 100%; }
+.page[aria-current="true"] h2 [data-px] { filter: drop-shadow(0 0 12px rgb(246 236 214 / 0.4)); }
+.does { margin: 0 0 22px; font-size: 1.12rem; color: var(--cap); text-wrap: pretty; }
+
+/* the key legend sits like four's own footer: K2 K3 on the left, E2 E3 on the right */
+.footer { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; margin: 0 0 22px; padding: 16px; border-radius: 8px; background: rgb(0 0 0 / 0.28); box-shadow: inset 0 0 0 1px var(--rule); }
+.k { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; row-gap: 6px; align-items: center; }
+.k .key { font-size: 0.72rem; font-weight: 600; color: var(--mute); font-variant-numeric: tabular-nums; }
+.k .word { height: 10px; align-self: center; }
+.k .says { grid-column: 1 / -1; font-size: 0.9rem; line-height: 1.4; color: var(--ink); }
+.shift, .picture { margin: 0 0 12px; color: var(--ink); text-wrap: pretty; }
+.shift { color: var(--mute); }
+
+.moves { max-width: var(--measure); padding: 28px 0 64px; border-top: 1px solid var(--rule); }
+.moves dl { margin: 0; display: grid; gap: 14px; }
+.moves dt { font-weight: 600; color: var(--cap); }
+.moves dd { margin: 2px 0 0; }
+
+#outro { position: relative; z-index: 2; padding: 64px var(--gutter) max(64px, env(safe-area-inset-bottom)); max-width: calc(var(--measure) + 2 * var(--gutter)); }
+.install { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 16px 0 20px; }
+.install code {
+  flex: 1 1 auto; padding: 12px 14px; border-radius: 8px; background: rgb(0 0 0 / 0.4); box-shadow: inset 0 0 0 1px var(--rule);
+  color: var(--lit); font: 500 0.92rem/1.3 ui-monospace, "SF Mono", Menlo, monospace; overflow-x: auto; white-space: nowrap;
+}
+.install button {
+  padding: 11px 18px; border-radius: 8px; border: 0; background: var(--lit); color: #121214; font: inherit; font-weight: 600; cursor: pointer;
+}
+.fine { color: var(--mute); font-size: 0.85rem; }
+
+/* focus mode: the screen alone */
+dialog#focus {
+  width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: var(--gutter);
+  border: 0; background: #050506; color: var(--ink);
+  display: none; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+}
+dialog#focus[open] { display: flex; }
+dialog#focus::backdrop { background: #050506; }
+#focus-screen { width: min(100%, calc((100dvh - 120px) * 2)); box-shadow: 0 0 80px -10px rgb(246 236 214 / 0.25); }
+dialog#focus .turn { margin: 0; font-size: 0.85rem; color: var(--mute); }
+dialog#focus .close {
+  padding: 9px 18px; border-radius: 999px; border: 1px solid var(--rule); background: transparent; color: var(--ink); font: inherit; cursor: pointer;
+}
+@media (orientation: landscape) { dialog#focus .turn { display: none; } }
+
+/* desktop: the case keeps the left half, the guide reads on the right */
+@media (min-width: 960px) {
+  :root { --gutter: 48px; }
+  body { font-size: 18px; }
+  .wordmark { height: 78px; }
+  .lede { font-size: 1.25rem; }
+  .hero-copy { bottom: 64px; }
+  .note { bottom: 64px; }
+  #guide { display: grid; grid-template-columns: 1fr minmax(380px, 520px); column-gap: 48px; padding-right: var(--gutter); }
+  .guide-screen { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); padding: 0; }
+  .guide-text { grid-column: 2; padding: 0; }
+  .guide-intro { margin-top: 30svh; }
+  .page { min-height: 86svh; }
+  .page h2 { height: 36px; }
+  #outro { margin-left: auto; margin-right: var(--gutter); max-width: 520px; padding-right: 0; }
+}
+
+/* reduced motion: no scrubbed assembly, the case simply sits there */
+.reduce #stage { height: 100svh; }
+.reduce .cue { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+.focus-desk { display: none; }
+@media (min-width: 960px) { .focus-desk { display: inline-block; margin-top: 18px; } }

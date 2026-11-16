@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>four, a live sampler for norns</title>
+    <meta name="description" content="four is a live sampler for norns with four stereo tracks. Catch what your synth or drum machine plays, and the recording turns into a new instrument in your hands." />
+    <meta name="theme-color" content="#08090b" />
+    <meta property="og:title" content="four, a live sampler for norns" />
+    <meta property="og:description" content="Four stereo tracks of live sampling for norns, page by page." />
+    <meta property="og:image" content="poster.png" />
+    <link rel="preload" href="model/case.glb" as="fetch" crossorigin />
+  </head>
+  <body>
+    <four-device aria-hidden="true"></four-device>
+    <img class="poster" src="poster.png" alt="" aria-hidden="true" />
+
+    <main>
+      <section id="stage" aria-label="four">
+        <div class="stage-sticky">
+          <div class="hero-copy">
+            <h1 class="wordmark"><span data-px>four</span></h1>
+            <p class="lede">A live sampler for norns with four stereo tracks. Catch what your synth or drum machine plays, and the recording turns into a new instrument in your hands.</p>
+            <p class="cue" aria-hidden="true">Scroll to put it together</p>
+          </div>
+          <p class="note note-device">This is a pocket-sized version of the norns shield, built around a Raspberry Pi Compute Module 4. It is still in design. four runs on any norns.</p>
+          <p class="note note-on">Switch it on.</p>
+        </div>
+      </section>
+
+      <section id="guide" aria-labelledby="guide-title">
+        <div class="guide-screen">
+          <div class="bezel">
+            <four-screen id="screen"></four-screen>
+          </div>
+          <button class="focus-btn" type="button" aria-controls="focus">Focus on the screen</button>
+        </div>
+        <div class="guide-text">
+          <header class="guide-intro">
+            <h2 id="guide-title">Twelve pages, three keys, three encoders</h2>
+            <p>E1 turns the page. K2, K3, E2 and E3 do what the bottom of the screen says, so the screen is the manual. Hold K1 for a second layer.</p>
+          </header>
+          <div id="pages"></div>
+          <section class="moves" aria-labelledby="moves-title">
+            <h2 id="moves-title">On every page</h2>
+            <dl>
+              <div><dt>K1 + E1</dt><dd>Pick track 1 to 4. TAKE, VOICE, FILTER and EFFECT follow it.</dd></div>
+              <div><dt>K1 + K2</dt><dd>Stop everything, and start it again where it was.</dd></div>
+              <div><dt>K1 + K3</dt><dd>A tap turns every effect off. A long hold erases what the page holds.</dd></div>
+            </dl>
+          </section>
+        </div>
+      </section>
+
+      <section id="outro" aria-labelledby="install-title">
+        <h2 id="install-title">Install</h2>
+        <p>In maiden, type this line, then select SYSTEM &gt; RESTART.</p>
+        <div class="install">
+          <code id="install-line">;install https://github.com/Alejo-end/four</code>
+          <button type="button" id="copy">Copy</button>
+        </div>
+        <p class="links"><a href="https://github.com/Alejo-end/four">Source and the full guide on GitHub</a></p>
+        <p class="fine">four is free software under the GNU General Public License v3.</p>
+      </section>
+    </main>
+
+    <dialog id="focus" aria-label="four's screen">
+      <four-screen id="focus-screen"></four-screen>
+      <p class="turn">Turn your phone sideways for a bigger screen.</p>
+      <button type="button" class="close">Close</button>
+    </dialog>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

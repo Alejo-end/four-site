@@ -1,0 +1,1309 @@
+{
+ "units": "mm",
+ "frame": "GLB scene frame (three.js world before any transform): +X to the right, +Y up out of the top face, +Z towards the front edge (the player). Origin at the centre of the Shell bounding box.",
+ "cad_origin_in_scene": [
+  -58,
+  -12.6,
+  30.5
+ ],
+ "note": "Each part node sits at its own box centre (center), with no rotation and scale 1; its mesh hangs in an unnamed child that holds the dequantization matrix. In three.js the named node is an Object3D: set materials on its mesh children.",
+ "screen": {
+  "node": "OLED_panel",
+  "face": "+Y",
+  "face_y": 11.4,
+  "viewing_window": {
+   "min": [
+    -31.71,
+    11.4,
+    -15.84
+   ],
+   "max": [
+    31.7,
+    11.4,
+    16.85
+   ],
+   "size": [
+    63.41,
+    32.69
+   ]
+  },
+  "uv": "TEXCOORD_0: u 0 to 1 from the left edge to the right edge of the viewing window, v 0 at the back edge (top of the picture) to 1 at the front edge, as glTF expects; a three.js texture with flipY = false shows the picture upright. Outside the window (under the top face) the UVs run past 0..1."
+ },
+ "parts": [
+  {
+   "name": "board-s90 1",
+   "three_name": "board-s90_1",
+   "triangles": 21231,
+   "min": [
+    -58.45,
+    -3.68,
+    -32.3
+   ],
+   "max": [
+    57.5,
+    19.51,
+    30.25
+   ],
+   "size": [
+    115.95,
+    23.19,
+    62.55
+   ],
+   "center": [
+    -0.47,
+    7.92,
+    -1.03
+   ],
+   "group": "board",
+   "children": [
+    {
+     "name": "s90_PCB",
+     "triangles": 3466,
+     "min": [
+      -57.5,
+      2.9,
+      -30
+     ],
+     "max": [
+      57.5,
+      4.42,
+      30
+     ],
+     "size": [
+      115,
+      1.52,
+      60
+     ],
+     "center": [
+      0,
+      3.66,
+      0
+     ]
+    },
+    {
+     "name": "CM4_module",
+     "triangles": 60,
+     "min": [
+      -19.5,
+      -3.68,
+      -12.2
+     ],
+     "max": [
+      35.5,
+      -0.1,
+      27.8
+     ],
+     "size": [
+      55,
+      3.58,
+      40
+     ],
+     "center": [
+      8,
+      -1.89,
+      7.8
+     ]
+    },
+    {
+     "name": "Components",
+     "triangles": 17705,
+     "min": [
+      -58.45,
+      -2.19,
+      -32.3
+     ],
+     "max": [
+      57.45,
+      19.51,
+      30.25
+     ],
+     "size": [
+      115.9,
+      21.69,
+      62.55
+     ],
+     "center": [
+      -0.5,
+      8.66,
+      -1.03
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Shell",
+   "triangles": 16874,
+   "min": [
+    -60,
+    -12.6,
+    -32.5
+   ],
+   "max": [
+    60,
+    12.6,
+    32.5
+   ],
+   "size": [
+    120,
+    25.2,
+    65
+   ],
+   "center": [
+    0,
+    0,
+    0
+   ],
+   "group": "shell"
+  },
+  {
+   "name": "Bottom_plate",
+   "triangles": 2152,
+   "min": [
+    -57.85,
+    -12.6,
+    -32.5
+   ],
+   "max": [
+    57.85,
+    4.1,
+    30.35
+   ],
+   "size": [
+    115.7,
+    16.7,
+    62.85
+   ],
+   "center": [
+    0,
+    -4.25,
+    -1.08
+   ],
+   "group": "bottom"
+  },
+  {
+   "name": "Heat_sheet",
+   "triangles": 636,
+   "min": [
+    -57.1,
+    -11.1,
+    -30.5
+   ],
+   "max": [
+    57.1,
+    -4.1,
+    30.5
+   ],
+   "size": [
+    114.2,
+    7,
+    61
+   ],
+   "center": [
+    0,
+    -7.6,
+    0
+   ],
+   "group": "battery_thermal"
+  },
+  {
+   "name": "Heat_sheet_film",
+   "triangles": 52,
+   "min": [
+    -43.5,
+    -4.1,
+    -30
+   ],
+   "max": [
+    36.5,
+    -4.05,
+    30
+   ],
+   "size": [
+    80,
+    0.05,
+    60
+   ],
+   "center": [
+    -3.5,
+    -4.07,
+    0
+   ],
+   "group": "battery_thermal"
+  },
+  {
+   "name": "Screen_window",
+   "triangles": 124,
+   "min": [
+    -33.21,
+    11.6,
+    -17.34
+   ],
+   "max": [
+    33.21,
+    12.1,
+    18.35
+   ],
+   "size": [
+    66.41,
+    0.5,
+    35.69
+   ],
+   "center": [
+    0,
+    11.85,
+    0.5
+   ],
+   "group": "screen"
+  },
+  {
+   "name": "TRS_slider",
+   "triangles": 268,
+   "min": [
+    -59.8,
+    1,
+    3.75
+   ],
+   "max": [
+    -57.55,
+    3.4,
+    11.75
+   ],
+   "size": [
+    2.25,
+    2.4,
+    8
+   ],
+   "center": [
+    -58.68,
+    2.2,
+    7.75
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Clear_lid",
+   "triangles": 700,
+   "min": [
+    -61.7,
+    6.6,
+    -34.2
+   ],
+   "max": [
+    61.7,
+    23.1,
+    34.2
+   ],
+   "size": [
+    123.4,
+    16.5,
+    68.4
+   ],
+   "center": [
+    0,
+    14.85,
+    0
+   ],
+   "group": "lid"
+  },
+  {
+   "name": "OLED_panel",
+   "triangles": 12,
+   "min": [
+    -37.1,
+    9,
+    -23.25
+   ],
+   "max": [
+    37.1,
+    11.4,
+    19.75
+   ],
+   "size": [
+    74.2,
+    2.4,
+    43
+   ],
+   "center": [
+    0,
+    10.2,
+    -1.75
+   ],
+   "group": "screen"
+  },
+  {
+   "name": "Screen_pcb",
+   "triangles": 12,
+   "min": [
+    -41,
+    8,
+    -23.25
+   ],
+   "max": [
+    41,
+    9,
+    24.25
+   ],
+   "size": [
+    82,
+    1,
+    47.5
+   ],
+   "center": [
+    0,
+    8.5,
+    0.5
+   ],
+   "group": "screen"
+  },
+  {
+   "name": "Screen_connector",
+   "triangles": 12,
+   "min": [
+    -13.45,
+    5,
+    13.4
+   ],
+   "max": [
+    13.45,
+    8,
+    20.25
+   ],
+   "size": [
+    26.9,
+    3,
+    6.85
+   ],
+   "center": [
+    0,
+    6.5,
+    16.82
+   ],
+   "group": "screen"
+  },
+  {
+   "name": "Screen_flex",
+   "triangles": 12,
+   "min": [
+    -7.7,
+    5.87,
+    -25.25
+   ],
+   "max": [
+    7.7,
+    8,
+    -2.75
+   ],
+   "size": [
+    15.4,
+    2.13,
+    22.5
+   ],
+   "center": [
+    0,
+    6.94,
+    -14
+   ],
+   "group": "screen"
+  },
+  {
+   "name": "Screen_screw_0",
+   "triangles": 140,
+   "min": [
+    -40.4,
+    6.7,
+    -22.65
+   ],
+   "max": [
+    -36.6,
+    8,
+    -18.85
+   ],
+   "size": [
+    3.8,
+    1.3,
+    3.8
+   ],
+   "center": [
+    -38.5,
+    7.35,
+    -20.75
+   ],
+   "group": "screen"
+  },
+  {
+   "name": "Screen_screw_1",
+   "triangles": 140,
+   "min": [
+    -40.4,
+    6.7,
+    19.85
+   ],
+   "max": [
+    -36.6,
+    8,
+    23.65
+   ],
+   "size": [
+    3.8,
+    1.3,
+    3.8
+   ],
+   "center": [
+    -38.5,
+    7.35,
+    21.75
+   ],
+   "group": "screen"
+  },
+  {
+   "name": "Screen_screw_2",
+   "triangles": 140,
+   "min": [
+    36.6,
+    6.7,
+    -22.65
+   ],
+   "max": [
+    40.4,
+    8,
+    -18.85
+   ],
+   "size": [
+    3.8,
+    1.3,
+    3.8
+   ],
+   "center": [
+    38.5,
+    7.35,
+    -20.75
+   ],
+   "group": "screen"
+  },
+  {
+   "name": "Screen_screw_3",
+   "triangles": 140,
+   "min": [
+    36.6,
+    6.7,
+    19.85
+   ],
+   "max": [
+    40.4,
+    8,
+    23.65
+   ],
+   "size": [
+    3.8,
+    1.3,
+    3.8
+   ],
+   "center": [
+    38.5,
+    7.35,
+    21.75
+   ],
+   "group": "screen"
+  },
+  {
+   "name": "Knob_E1",
+   "triangles": 768,
+   "min": [
+    -54.2,
+    13.1,
+    -24.48
+   ],
+   "max": [
+    -41.2,
+    19.6,
+    -11.52
+   ],
+   "size": [
+    13,
+    6.5,
+    12.97
+   ],
+   "center": [
+    -47.7,
+    16.35,
+    -18
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Pointer_E1",
+   "triangles": 12,
+   "min": [
+    -48.1,
+    19.6,
+    -23.5
+   ],
+   "max": [
+    -47.3,
+    19.63,
+    -20
+   ],
+   "size": [
+    0.8,
+    0.03,
+    3.5
+   ],
+   "center": [
+    -47.7,
+    19.62,
+    -21.75
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Knob_E2",
+   "triangles": 768,
+   "min": [
+    -54.2,
+    13.1,
+    11.52
+   ],
+   "max": [
+    -41.2,
+    19.6,
+    24.48
+   ],
+   "size": [
+    13,
+    6.5,
+    12.97
+   ],
+   "center": [
+    -47.7,
+    16.35,
+    18
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Pointer_E2",
+   "triangles": 12,
+   "min": [
+    -48.1,
+    19.6,
+    12.5
+   ],
+   "max": [
+    -47.3,
+    19.63,
+    16
+   ],
+   "size": [
+    0.8,
+    0.03,
+    3.5
+   ],
+   "center": [
+    -47.7,
+    19.62,
+    14.25
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Knob_E3",
+   "triangles": 768,
+   "min": [
+    41.2,
+    13.1,
+    11.52
+   ],
+   "max": [
+    54.2,
+    19.6,
+    24.48
+   ],
+   "size": [
+    13,
+    6.5,
+    12.97
+   ],
+   "center": [
+    47.7,
+    16.35,
+    18
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Pointer_E3",
+   "triangles": 12,
+   "min": [
+    47.3,
+    19.6,
+    12.5
+   ],
+   "max": [
+    48.1,
+    19.63,
+    16
+   ],
+   "size": [
+    0.8,
+    0.03,
+    3.5
+   ],
+   "center": [
+    47.7,
+    19.62,
+    14.25
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Cap_K1",
+   "triangles": 784,
+   "min": [
+    44.12,
+    9.7,
+    -21.29
+   ],
+   "max": [
+    54.1,
+    15.6,
+    -11.31
+   ],
+   "size": [
+    9.98,
+    5.9,
+    9.99
+   ],
+   "center": [
+    49.11,
+    12.65,
+    -16.3
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Cap_K2",
+   "triangles": 784,
+   "min": [
+    -54.08,
+    9.7,
+    -1.49
+   ],
+   "max": [
+    -44.1,
+    15.6,
+    8.49
+   ],
+   "size": [
+    9.98,
+    5.9,
+    9.99
+   ],
+   "center": [
+    -49.09,
+    12.65,
+    3.5
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Cap_K3",
+   "triangles": 784,
+   "min": [
+    44.12,
+    9.7,
+    -1.49
+   ],
+   "max": [
+    54.1,
+    15.6,
+    8.49
+   ],
+   "size": [
+    9.98,
+    5.9,
+    9.99
+   ],
+   "center": [
+    49.11,
+    12.65,
+    3.5
+   ],
+   "group": "controls"
+  },
+  {
+   "name": "Mic_gasket_0",
+   "triangles": 12,
+   "min": [
+    -45,
+    5.2,
+    -30.5
+   ],
+   "max": [
+    -39,
+    10.8,
+    -29.5
+   ],
+   "size": [
+    6,
+    5.6,
+    1
+   ],
+   "center": [
+    -42,
+    8,
+    -30
+   ],
+   "group": "mics"
+  },
+  {
+   "name": "Mic_board_0",
+   "triangles": 12,
+   "min": [
+    -45,
+    5.2,
+    -29.5
+   ],
+   "max": [
+    -39,
+    10.8,
+    -28.5
+   ],
+   "size": [
+    6,
+    5.6,
+    1
+   ],
+   "center": [
+    -42,
+    8,
+    -29
+   ],
+   "group": "mics"
+  },
+  {
+   "name": "Mic_0",
+   "triangles": 12,
+   "min": [
+    -43.9,
+    6.9,
+    -28.5
+   ],
+   "max": [
+    -40.1,
+    9.1,
+    -27.4
+   ],
+   "size": [
+    3.8,
+    2.2,
+    1.1
+   ],
+   "center": [
+    -42,
+    8,
+    -27.95
+   ],
+   "group": "mics"
+  },
+  {
+   "name": "Mic_gasket_1",
+   "triangles": 12,
+   "min": [
+    39,
+    5.2,
+    -30.5
+   ],
+   "max": [
+    45,
+    10.8,
+    -29.5
+   ],
+   "size": [
+    6,
+    5.6,
+    1
+   ],
+   "center": [
+    42,
+    8,
+    -30
+   ],
+   "group": "mics"
+  },
+  {
+   "name": "Mic_board_1",
+   "triangles": 12,
+   "min": [
+    39,
+    5.2,
+    -29.5
+   ],
+   "max": [
+    45,
+    10.8,
+    -28.5
+   ],
+   "size": [
+    6,
+    5.6,
+    1
+   ],
+   "center": [
+    42,
+    8,
+    -29
+   ],
+   "group": "mics"
+  },
+  {
+   "name": "Mic_1",
+   "triangles": 12,
+   "min": [
+    40.1,
+    6.9,
+    -28.5
+   ],
+   "max": [
+    43.9,
+    9.1,
+    -27.4
+   ],
+   "size": [
+    3.8,
+    2.2,
+    1.1
+   ],
+   "center": [
+    42,
+    8,
+    -27.95
+   ],
+   "group": "mics"
+  },
+  {
+   "name": "Battery",
+   "triangles": 12,
+   "min": [
+    -43.5,
+    -10.7,
+    -26.5
+   ],
+   "max": [
+    36.5,
+    -5.2,
+    21.5
+   ],
+   "size": [
+    80,
+    5.5,
+    48
+   ],
+   "center": [
+    -3.5,
+    -7.95,
+    -2.5
+   ],
+   "group": "battery_thermal"
+  },
+  {
+   "name": "Battery_foam",
+   "triangles": 12,
+   "min": [
+    -43.5,
+    -5.2,
+    -26.5
+   ],
+   "max": [
+    36.5,
+    -4.6,
+    21.5
+   ],
+   "size": [
+    80,
+    0.6,
+    48
+   ],
+   "center": [
+    -3.5,
+    -4.9,
+    -2.5
+   ],
+   "group": "battery_thermal"
+  },
+  {
+   "name": "Thermal_pad",
+   "triangles": 12,
+   "min": [
+    5,
+    -4.1,
+    -2.7
+   ],
+   "max": [
+    20,
+    -3.68,
+    12.3
+   ],
+   "size": [
+    15,
+    0.42,
+    15
+   ],
+   "center": [
+    12.5,
+    -3.89,
+    4.8
+   ],
+   "group": "battery_thermal"
+  },
+  {
+   "name": "Board_screw_0",
+   "triangles": 140,
+   "min": [
+    -50.25,
+    1.6,
+    -9.65
+   ],
+   "max": [
+    -46.75,
+    2.9,
+    -6.15
+   ],
+   "size": [
+    3.5,
+    1.3,
+    3.5
+   ],
+   "center": [
+    -48.5,
+    2.25,
+    -7.9
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "Board_screw_1",
+   "triangles": 140,
+   "min": [
+    51.25,
+    1.6,
+    -8.25
+   ],
+   "max": [
+    54.75,
+    2.9,
+    -4.75
+   ],
+   "size": [
+    3.5,
+    1.3,
+    3.5
+   ],
+   "center": [
+    53,
+    2.25,
+    -6.5
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "Board_screw_2",
+   "triangles": 140,
+   "min": [
+    -36.25,
+    1.6,
+    25.25
+   ],
+   "max": [
+    -32.75,
+    2.9,
+    28.75
+   ],
+   "size": [
+    3.5,
+    1.3,
+    3.5
+   ],
+   "center": [
+    -34.5,
+    2.25,
+    27
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "Board_screw_3",
+   "triangles": 140,
+   "min": [
+    44.5,
+    1.6,
+    26.75
+   ],
+   "max": [
+    48,
+    2.9,
+    30.25
+   ],
+   "size": [
+    3.5,
+    1.3,
+    3.5
+   ],
+   "center": [
+    46.25,
+    2.25,
+    28.5
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "Foot_0",
+   "triangles": 144,
+   "min": [
+    -48.49,
+    -14.1,
+    -20.5
+   ],
+   "max": [
+    -40.5,
+    -12.6,
+    -12.5
+   ],
+   "size": [
+    7.99,
+    1.5,
+    7.99
+   ],
+   "center": [
+    -44.49,
+    -13.35,
+    -16.5
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "Foot_1",
+   "triangles": 144,
+   "min": [
+    40.51,
+    -14.1,
+    -20.5
+   ],
+   "max": [
+    48.5,
+    -12.6,
+    -12.5
+   ],
+   "size": [
+    7.99,
+    1.5,
+    7.99
+   ],
+   "center": [
+    44.51,
+    -13.35,
+    -16.5
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "Foot_2",
+   "triangles": 144,
+   "min": [
+    -48.49,
+    -14.1,
+    17.5
+   ],
+   "max": [
+    -40.5,
+    -12.6,
+    25.5
+   ],
+   "size": [
+    7.99,
+    1.5,
+    7.99
+   ],
+   "center": [
+    -44.49,
+    -13.35,
+    21.5
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "Foot_3",
+   "triangles": 144,
+   "min": [
+    40.51,
+    -14.1,
+    17.5
+   ],
+   "max": [
+    48.5,
+    -12.6,
+    25.5
+   ],
+   "size": [
+    7.99,
+    1.5,
+    7.99
+   ],
+   "center": [
+    44.51,
+    -13.35,
+    21.5
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "CM4_spacer_0",
+   "triangles": 132,
+   "min": [
+    -18.25,
+    -0.1,
+    22.06
+   ],
+   "max": [
+    -13.75,
+    2.9,
+    26.54
+   ],
+   "size": [
+    4.5,
+    3,
+    4.48
+   ],
+   "center": [
+    -16,
+    1.4,
+    24.3
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "CM4_screw_0",
+   "triangles": 140,
+   "min": [
+    -18.25,
+    -2.9,
+    22.05
+   ],
+   "max": [
+    -13.75,
+    -1.3,
+    26.55
+   ],
+   "size": [
+    4.5,
+    1.6,
+    4.5
+   ],
+   "center": [
+    -16,
+    -2.1,
+    24.3
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "CM4_spacer_1",
+   "triangles": 132,
+   "min": [
+    29.75,
+    -0.1,
+    22.06
+   ],
+   "max": [
+    34.25,
+    2.9,
+    26.54
+   ],
+   "size": [
+    4.5,
+    3,
+    4.48
+   ],
+   "center": [
+    32,
+    1.4,
+    24.3
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "CM4_screw_1",
+   "triangles": 140,
+   "min": [
+    29.75,
+    -2.9,
+    22.05
+   ],
+   "max": [
+    34.25,
+    -1.3,
+    26.55
+   ],
+   "size": [
+    4.5,
+    1.6,
+    4.5
+   ],
+   "center": [
+    32,
+    -2.1,
+    24.3
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "CM4_spacer_2",
+   "triangles": 132,
+   "min": [
+    29.75,
+    -0.1,
+    -10.94
+   ],
+   "max": [
+    34.25,
+    2.9,
+    -6.46
+   ],
+   "size": [
+    4.5,
+    3,
+    4.48
+   ],
+   "center": [
+    32,
+    1.4,
+    -8.7
+   ],
+   "group": "fasteners"
+  },
+  {
+   "name": "CM4_screw_2",
+   "triangles": 140,
+   "min": [
+    29.75,
+    -2.9,
+    -10.95
+   ],
+   "max": [
+    34.25,
+    -1.3,
+    -6.45
+   ],
+   "size": [
+    4.5,
+    1.6,
+    4.5
+   ],
+   "center": [
+    32,
+    -2.1,
+    -8.7
+   ],
+   "group": "fasteners"
+  }
+ ]
+}
