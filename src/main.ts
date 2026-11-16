@@ -7,7 +7,8 @@ import "./four-screen";
 import "./four-device"; // side effects: the custom elements register on import
 import { FourScreen } from "./four-screen";
 import type { FourDevice } from "./four-device";
-import { PAGES } from "./pages";
+import { PAGES, VOICES, AUTOMATA, IDEAS } from "./pages";
+import { startSketches } from "./sketches";
 import { pixelize } from "./pixelfont";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -36,6 +37,29 @@ for (const p of PAGES) {
     <p class="picture">${p.picture}</p>`;
   pagesEl.appendChild(a);
 }
+// the machines: each one shows its own screen while it is in view
+for (const [list, host] of [[VOICES, "#voices"], [AUTOMATA, "#automata"]] as const) {
+  const el = document.querySelector(host)!;
+  for (const m of list) {
+    const a = document.createElement("article");
+    a.className = "machine";
+    a.id = m.id;
+    a.dataset.clips = m.clips.join(" ");
+    a.innerHTML = `<h4><span data-px>${m.name}</span></h4><p>${m.text}</p>`;
+    el.appendChild(a);
+  }
+}
+// the ideas, each with a small sketch drawn like four's screen
+const ideasEl = document.querySelector("#ideas")!;
+for (const idea of IDEAS) {
+  const a = document.createElement("article");
+  a.className = "idea";
+  a.id = idea.id;
+  a.innerHTML = `<canvas data-sketch="${idea.sketch}" aria-hidden="true"></canvas><h3>${idea.title}</h3><p>${idea.text}</p>`;
+  ideasEl.appendChild(a);
+}
+startSketches();
+
 // a focus button for the desktop layout, where the 2D screen is hidden
 const intro = document.querySelector(".guide-intro")!;
 const deskFocus = document.createElement("button");
@@ -114,11 +138,11 @@ ScrollTrigger.create({
 });
 // past the guide, the case fades for the install section
 ScrollTrigger.create({
-  trigger: "#outro",
+  trigger: "#inside",
   start: "top 80%",
-  end: "top 30%",
+  end: "top 20%",
   onUpdate: (st) => {
-    if (desktop.matches) device.style.opacity = String(1 - st.progress * 0.75);
+    if (desktop.matches) device.style.opacity = String(1 - st.progress * 0.8);
   },
 });
 
@@ -140,7 +164,7 @@ const io = new IntersectionObserver(
   },
   { rootMargin: "-45% 0px -50% 0px" },
 );
-document.querySelectorAll(".page").forEach((el) => io.observe(el));
+document.querySelectorAll(".page, .machine").forEach((el) => io.observe(el));
 
 // ---- focus mode: the screen alone ----------------------------------------
 const dialog = document.querySelector<HTMLDialogElement>("#focus")!;

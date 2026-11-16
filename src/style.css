@@ -168,3 +168,52 @@ dialog#focus .close {
 
 .focus-desk { display: none; }
 @media (min-width: 960px) { .focus-desk { display: inline-block; margin-top: 18px; } }
+
+/* the machines, inside the guide */
+.machines { max-width: var(--measure); padding: 28px 0 40px; border-top: 1px solid var(--rule); }
+.machines h2, #inside h2 {
+  font-size: 1.45rem; line-height: 1.2; font-weight: 600; letter-spacing: -0.01em; color: var(--lit); margin: 0 0 12px;
+}
+.machines h3, #inside h3 { font-size: 1.05rem; font-weight: 600; color: var(--cap); margin: 36px 0 8px; }
+.section-lede { margin: 0; color: var(--ink); text-wrap: pretty; }
+.machine { min-height: 46svh; padding: 22px 0 28px; }
+.machine h4 { height: 20px; margin: 0 0 12px; }
+.machine h4 [data-px] { height: 100%; }
+.machine[aria-current="true"] h4 [data-px] { filter: drop-shadow(0 0 10px rgb(246 236 214 / 0.4)); }
+.machine p { margin: 0; text-wrap: pretty; }
+
+/* inside four: the path of a sound, the engine, the ideas */
+#inside { position: relative; z-index: 2; padding: 72px var(--gutter) 24px; }
+#inside > * { max-width: var(--measure); }
+.flow { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 0; }
+.flow li { position: relative; display: grid; grid-template-columns: 9.5rem 1fr; gap: 12px; padding: 10px 0 10px 18px; }
+.flow li::before {
+  content: ""; position: absolute; left: 4px; top: 0; bottom: 0; width: 1px; background: var(--rule);
+}
+.flow li::after {
+  content: ""; position: absolute; left: 1px; top: 17px; width: 7px; height: 7px; border-radius: 50%; background: var(--sweep-out); box-shadow: inset 0 0 0 1px var(--mute);
+}
+.flow li.per-track::after { background: var(--lit); box-shadow: 0 0 10px rgb(246 236 214 / 0.5); }
+.flow li:first-child::before { top: 17px; }
+.flow li:last-child::before { bottom: calc(100% - 20px); }
+.flow b { font-weight: 600; color: var(--cap); }
+.flow span { color: var(--ink); font-size: 0.95rem; }
+.flow-note { color: var(--mute); font-size: 0.92rem; margin: 14px 0 0; text-wrap: pretty; }
+.facts { margin: 0; display: grid; gap: 16px; }
+.facts dt { font-weight: 600; color: var(--cap); }
+.facts dd { margin: 2px 0 0; text-wrap: pretty; }
+.ideas-title { margin-top: 64px !important; }
+.ideas { display: grid; gap: 34px; margin-top: 18px; }
+.idea canvas {
+  display: block; width: 100%; aspect-ratio: 160 / 56; image-rendering: pixelated; image-rendering: crisp-edges;
+  border-radius: 6px; background: #070708;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04), 0 0 40px -16px rgb(246 236 214 / 0.25);
+}
+.idea h3 { margin: 14px 0 6px !important; color: var(--lit) !important; }
+.idea p { margin: 0; text-wrap: pretty; }
+@media (min-width: 560px) { .flow li { grid-template-columns: 11rem 1fr; } }
+@media (min-width: 960px) {
+  #inside { margin-left: auto; margin-right: var(--gutter); max-width: 520px; padding-right: 0; }
+  #inside > * { max-width: none; }
+  .machine { min-height: 60svh; }
+}

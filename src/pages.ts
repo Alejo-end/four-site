@@ -181,3 +181,128 @@ export const PAGES: Page[] = [
     clips: ["scene"],
   },
 ];
+
+// ---- the machines --------------------------------------------------------
+export type Machine = { id: string; name: string; text: string; clips: string[] };
+
+/** The five voices: the machines that make the sound. */
+export const VOICES: Machine[] = [
+  {
+    id: "m-play",
+    name: "PLAY",
+    text: "The take as a tape loop. Pitch bends it like varispeed, and at pitch 1 it comes back bit for bit. On track 1, erosion rewrites the loop a little darker and quieter on every pass, and HEAL stops it.",
+    clips: ["voice_play"],
+  },
+  {
+    id: "m-grain",
+    name: "GRAIN",
+    text: "A cloud of short slices of the take, in stereo pairs, sprayed around the playhead. They arrive anywhere from a steady pulse to random timing, up to 48 pairs at once. Size and density shape the cloud.",
+    clips: ["voice_grain"],
+  },
+  {
+    id: "m-warp",
+    name: "WARP",
+    text: "Slow or fast at the same pitch. Each grain picks up where the last one left off, so the waves line up and drums keep their edge. At speed 1 it is the take, sample for sample.",
+    clips: ["voice_warp"],
+  },
+  {
+    id: "m-pv",
+    name: "PV",
+    text: "A phase vocoder. It plays the take's spectrum back at any speed, and a standing head freezes the sound into a drone that you can still pitch.",
+    clips: ["voice_pv"],
+  },
+  {
+    id: "m-cloud",
+    name: "CLOUD",
+    text: "A texture granulator for washes and smears. It is MiClouds when the mi-UGens are installed on the norns, and a stock granulator when they are not.",
+    clips: ["voice_cloud"],
+  },
+];
+
+/** The machines that play on their own while your hands are busy. */
+export const AUTOMATA: Machine[] = [
+  {
+    id: "m-seq",
+    name: "SEQUENCER",
+    text: "Plays the eight pads on the clock. It walks them up, down, back and forth or at random. Step chance skips hits and step gate shortens them. The header shows SQ while it runs.",
+    clips: ["pads"],
+  },
+  {
+    id: "m-lfo",
+    name: "MODULATORS",
+    text: "Four of them. Each one swings a knob around where you left it: sine, triangle, square, ramp, random, or ENV, the envelope of what comes in. Free from 0.01 to 6 Hz, or locked to the clock from a beat to eight bars.",
+    clips: ["motion"],
+  },
+  {
+    id: "m-motion",
+    name: "MOTION",
+    text: "Records what your hands do to the knobs and plays it back as a loop. A loop close to a musical length snaps to it, so it stays on the clock.",
+    clips: ["motion"],
+  },
+  {
+    id: "m-orbit",
+    name: "ORBIT",
+    text: "Wanders between the scenes you stored. It picks one, morphs part of the way, rests, and picks the next. Drift sets how long it takes, reach how far it goes.",
+    clips: ["scene"],
+  },
+];
+
+// ---- the ideas behind it -------------------------------------------------
+export type Idea = { id: string; title: string; text: string; sketch: string };
+
+export const IDEAS: Idea[] = [
+  {
+    id: "i-grains",
+    title: "Granular clouds",
+    sketch: "grains",
+    text: "Many short slices of the take play at once, each faded in and out by a Hann window. They come in stereo pairs and arrive on a steady pulse, at random (Poisson) times, or anywhere between. The level follows the overlap, density times size, so a thicker cloud is denser, not louder.",
+  },
+  {
+    id: "i-wsola",
+    title: "Time stretch by WSOLA",
+    sketch: "wsola",
+    text: "WARP places each new grain where it continues the last one. It searches about 10 ms around the planned spot for the best match by cross-correlation, so the waves line up instead of fluttering. A grain that starts on an attack is copied whole.",
+  },
+  {
+    id: "i-pv",
+    title: "A phase vocoder with locked phases",
+    sketch: "pv",
+    text: "PV cuts the take into frames of 2048 samples at 75% overlap and plays their spectra back at any speed. Only the peaks carry their phase forward, and every other bin follows its peak (Laroche and Dolson, 1999), so a note stays one note. A sudden attack resets the phases and stays sharp.",
+  },
+  {
+    id: "i-sinc",
+    title: "Windowed sinc resampling",
+    sketch: "sinc",
+    text: "Pitch is a resampler: a sinc kernel with 16 taps and a Kaiser window, read from a table of 512 fractional positions. Above pitch 1 its cutoff falls with the ratio, so up to pitch 2 the top of the sound does not fold back as noise. At pitch 1 the take comes out bit for bit.",
+  },
+  {
+    id: "i-bbd",
+    title: "A bucket brigade delay",
+    sketch: "bbd",
+    text: "An analog delay chip is a chain of capacitors that pass a charge along on every clock tick. four models one. The TIME knob moves the clock, so a change of time bends the echoes in pitch like tape, and a long delay means a slow clock and a darker echo. That darkness is the sampling theorem at work.",
+  },
+  {
+    id: "i-room",
+    title: "A room from eight delay lines",
+    sketch: "room",
+    text: "The reverb is a feedback delay network: eight delay lines feed each other through a Householder matrix, which keeps the energy until the walls take some away. SIZE sets the room and DAMP darkens the reflections, as air and soft walls do. Shimmer sends the tail around again an octave up.",
+  },
+  {
+    id: "i-ladder",
+    title: "A diode ladder filter",
+    sketch: "ladder",
+    text: "The filter models a diode ladder: a low-pass whose resonance sings just short of oscillation. High-pass is its mirror, and band-pass is the low-pass peak with the lows taken away. A change of type crossfades in 20 ms, so it never clicks.",
+  },
+  {
+    id: "i-colour",
+    title: "Drive and crush",
+    sketch: "colour",
+    text: "Drive pushes the track into a tanh curve, the soft clip of an overdriven amplifier, through four's own fast copy of it. Crush lowers the sample rate and the bit depth together, for aliasing on purpose.",
+  },
+  {
+    id: "i-lanes",
+    title: "Only what you hear runs",
+    sketch: "lanes",
+    text: "Each track's filter, colour and effects are small synths in a lane, and only the ones you hear exist. An effect that is off costs nothing. That is how four tracks fit in one core of a Raspberry Pi 4.",
+  },
+];
