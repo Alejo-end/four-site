@@ -80,7 +80,7 @@
         <h3>The engine</h3>
         <dl class="facts">
           <div><dt>Our own UGens</dt><dd>FourPV, FourWarp, FourRead, FourGrain, FourDelay, FourBBD, FourRoom and FourTanh, in one plugin. Without it, four builds stock voices and still plays.</dd></div>
-          <div><dt>The budget</dt><dd>One SuperCollider thread on a Raspberry Pi 4 starts to drop audio near 60%. Measured with reverb and delay on, four tracks of PLAY take 17%, four of GRAIN 19% and four of PV 29%.</dd></div>
+          <div><dt>What it costs</dt><dd>Measured on a Raspberry Pi 4 with reverb and delay on, four tracks of PLAY take 17% of the audio thread, four of GRAIN 19% and four of PV 29%. That leaves plenty of room to play.</dd></div>
           <div><dt>Exact where it can be</dt><dd>At pitch 1 and speed 1, PLAY, WARP and PV return the take sample for sample, and a track leaves the engine at the level of its take.</dd></div>
           <div><dt>Tested</dt><dd>The C++ cores have their own test program, and an offline check renders the real engine after every change and compares it with measured numbers.</dd></div>
         </dl>

@@ -303,6 +303,6 @@ export const IDEAS: Idea[] = [
     id: "i-lanes",
     title: "Only what you hear runs",
     sketch: "lanes",
-    text: "Each track's filter, colour and effects are small synths in a lane, and only the ones you hear exist. An effect that is off costs nothing. That is how four tracks fit in one core of a Raspberry Pi 4.",
+    text: "Each track's filter, colour and effects are small synths in a lane, and only the ones you hear exist. An effect that is off costs nothing, so the audio thread only carries what you can hear.",
   },
 ];

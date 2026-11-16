@@ -376,8 +376,6 @@ const SKETCHES: Record<string, Sketch> = {
     p.rect(168, 9, 12, 54, 5);
     const h = Math.round((on / 20) * 52);
     p.rect(169, 62 - h, 10, h, 12, true);
-    p.dots(164, 62 - 0.6 * 52, 184, 62 - 0.6 * 52, 8);
-    p.text(186, 62 - 0.6 * 52 - 2, "60", 8);
   },
 };
 
