@@ -58,6 +58,11 @@ const P_ASM: [number, number] = [0.06, 0.58];
 const P_TURN: [number, number] = [0.5, 0.82];
 const P_ON: [number, number] = [0.8, 0.92];
 
+// scratch objects for the frame loop: it allocates nothing, so a phone never pauses to collect
+const _q = new THREE.Quaternion();
+const _q2 = new THREE.Quaternion();
+const _e = new THREE.Euler();
+
 type Part = {
   obj: THREE.Object3D;
   layer: Layer;
@@ -154,7 +159,9 @@ export class FourDevice extends HTMLElement {
       return;
     }
     this.renderer = renderer;
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    // a phone gets fewer pixels: the case is the same, and the GPU has half the work
+    const touch = matchMedia("(pointer: coarse)").matches;
+    renderer.setPixelRatio(Math.min(devicePixelRatio, touch ? 1.5 : 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -336,8 +343,17 @@ export class FourDevice extends HTMLElement {
     this.rAssembled = Math.abs(size.dot(R)) / 2 + 8;
     this.pivot.quaternion.copy(savedQ);
     this.pivot.position.copy(savedP);
-    this.resolveReady();
+    // compile every shader now, before the first scroll asks for a frame, then
+    // fade the case in: no hitch and no pop on the first scroll
+    try {
+      await this.renderer!.compileAsync(this.scene, this.camera);
+    } catch {
+      /* compileAsync is an optimisation; a frame compiles anything left */
+    }
     this.dirty = true;
+    this.frame();
+    requestAnimationFrame(() => this.classList.add("ready"));
+    this.resolveReady();
     this.dispatchEvent(new Event("load"));
   }
 
@@ -422,7 +438,9 @@ export class FourDevice extends HTMLElement {
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
+    // a resize clears the canvas: draw again at once, so no blank frame shows
     this.dirty = true;
+    this.frame();
   }
 
   private frame() {
@@ -453,7 +471,7 @@ export class FourDevice extends HTMLElement {
       const turnK = apart * apart;
       part.obj.quaternion
         .copy(part.homeQ)
-        .multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(part.jitter.x * turnK, part.jitter.y * turnK, part.jitter.z * turnK)));
+        .multiply(_q.setFromEuler(_e.set(part.jitter.x * turnK, part.jitter.y * turnK, part.jitter.z * turnK)));
     }
     // the camera frames the stack as it is now: centred, and as tall as it is
     if (!this.parts.length) lowNow = highNow = 0;
@@ -463,15 +481,15 @@ export class FourDevice extends HTMLElement {
     // the case: hero angle with a slow drift, turning to face you
     const idle = 1 - span(p, 0, 0.3);
     this.pointerNow.lerp(this.pointer, 0.05);
-    const drift = new THREE.Quaternion().setFromEuler(
-      new THREE.Euler(
+    const drift = _q.setFromEuler(
+      _e.set(
         Math.sin(t * 0.35) * 0.05 * idle + this.pointerNow.y * 0.06,
         Math.sin(t * 0.22) * 0.12 * idle + this.pointerNow.x * 0.1,
         0,
       ),
     );
     // in the guide the case leans a little, so it keeps its depth beside the text
-    const lean = new THREE.Quaternion().setFromEuler(new THREE.Euler(-0.12 * this.shiftNow, 0.32 * this.shiftNow, 0));
+    const lean = _q2.setFromEuler(_e.set(-0.12 * this.shiftNow, 0.32 * this.shiftNow, 0));
     this.pivot.quaternion.copy(this.qHero).slerp(this.qFace, turn).premultiply(lean).premultiply(drift);
     this.pivot.position.y = Math.sin(t * 0.6) * 1.5 * idle;
 

@@ -12,6 +12,8 @@ import { startSketches } from "./sketches";
 import { pixelize } from "./pixelfont";
 
 gsap.registerPlugin(ScrollTrigger);
+// a phone's address bar shows and hides as you scroll: do not recompute every trigger for it
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const desktop = matchMedia("(min-width: 960px)");
@@ -200,10 +202,24 @@ copy.addEventListener("click", async () => {
   setTimeout(() => (copy.textContent = "Copy"), 1800);
 });
 
-// load every clip once the case is in, so a page change shows its frames at once
-device.ready.then(() => {
-  const ids = ["intro", "take", ...PAGES.flatMap((p) => p.clips)];
-  const idle = (window as any).requestIdleCallback ?? ((f: () => void) => setTimeout(f, 300));
-  idle(() => FourScreen.preload([...new Set(ids)]).catch(() => {}));
-});
+// clips: the opening and the take as soon as the case is in, the rest one at a
+// time while the browser is idle, and only once the guide comes near, so the
+// first scroll of the page never waits on a decode
+const idle = (f: () => void) =>
+  ((window as any).requestIdleCallback ? (window as any).requestIdleCallback(f, { timeout: 2000 }) : setTimeout(f, 200));
+device.ready.then(() => idle(() => FourScreen.preload(["intro", "take"]).catch(() => {})));
+const later = [...new Set([...PAGES, ...VOICES, ...AUTOMATA].flatMap((p) => p.clips))];
+const nearGuide = new IntersectionObserver(
+  ([e]) => {
+    if (!e.isIntersecting) return;
+    nearGuide.disconnect();
+    const next = () => {
+      const id = later.shift();
+      if (id) idle(() => FourScreen.preload([id]).finally(next));
+    };
+    next();
+  },
+  { rootMargin: "150% 0px" },
+);
+nearGuide.observe(document.querySelector("#guide")!);
 desktop.addEventListener("change", () => ScrollTrigger.refresh());
