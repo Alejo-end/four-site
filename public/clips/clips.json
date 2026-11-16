@@ -20,6 +20,6 @@
     { "id": "mix", "page": "MIX", "file": "mix.png", "frames": 54, "loop_start": 9, "caption": "MIX, the console: the input meter, the engine deck and the tape deck at their real gains across the crossfade, and the master meter." },
     { "id": "pads", "page": "PADS", "file": "pads.png", "frames": 49, "loop_start": 9, "caption": "PADS: the take in eight slices. The sequencer steps through them; the pad it plays lights and its step stands tall." },
     { "id": "motion", "page": "MOTION", "file": "motion.png", "frames": 54, "loop_start": 9, "caption": "MOTION: a recorded gesture plays back on its lanes, and the modulators below swing their knobs; a dot shows where each one is now." },
-    { "id": "scene", "page": "SCENE", "file": "scene.png", "frames": 54, "loop_start": 9, "caption": "SCENE: eight slots of stored states. E3 morphs the sound from where it is toward the selected slot, and back." }
+    { "id": "scene", "page": "SCENE", "file": "scene.png", "frames": 54, "loop_start": 9, "caption": "SCENE: eight slots of stored states. E3 fades from A, slot 1, toward B, slot 4, and back." }
   ]
 }
