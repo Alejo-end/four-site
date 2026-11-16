@@ -192,7 +192,8 @@ export class FourDevice extends HTMLElement {
     this.load();
     const loop = () => {
       requestAnimationFrame(loop);
-      if (this.visible) this.frame();
+      // on a phone the guide fades the case out: it is fixed, so it stays "visible"
+      if (this.visible && this.style.opacity !== "0") this.frame();
     };
     requestAnimationFrame(loop);
   }

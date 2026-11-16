@@ -99,6 +99,7 @@ export class FourScreen extends HTMLElement {
   private listPos = 0;
   private loops = 0;
   private want = 0; // the newest clip request wins
+  private advancing = false; // a playlist is loading its next clip
   loopsPerClip = 2;
 
   constructor() {
@@ -210,8 +211,12 @@ export class FourScreen extends HTMLElement {
       if (f >= frames) {
         this.loops++;
         if (this.playlist.length > 1 && this.loops >= this.loopsPerClip) {
-          this.listPos = (this.listPos + 1) % this.playlist.length;
-          this.setClip(this.playlist[this.listPos], true);
+          // hold the last frame until the next clip is in: one request, not one each frame
+          if (!this.advancing) {
+            this.advancing = true;
+            this.listPos = (this.listPos + 1) % this.playlist.length;
+            this.setClip(this.playlist[this.listPos], true).finally(() => (this.advancing = false));
+          }
           return;
         }
         f = loop_start < frames ? loop_start : frames - 1;

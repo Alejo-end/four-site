@@ -88,10 +88,13 @@ if (!reduce) {
 
 // ---- the stage: explode, assemble, turn, power on ------------------------
 let powered = false;
+// the guide page in the middle of the view, once the guide is reached
+let activePage: HTMLElement | null = null;
 function power(on: boolean) {
   if (on === powered) return;
   powered = on;
-  if (on) {
+  // the opening plays on the way down to the guide, never over a page of it
+  if (on && !activePage) {
     screen.setClip("intro").then(() => screen.play());
   }
 }
@@ -149,7 +152,6 @@ ScrollTrigger.create({
 });
 
 // the page in the middle of the view sets the clip
-let activePage: HTMLElement | null = null;
 const io = new IntersectionObserver(
   (entries) => {
     for (const e of entries) {
@@ -162,6 +164,9 @@ const io = new IntersectionObserver(
       const clips = el.dataset.clips!.split(" ");
       screen.setPlaylist(clips)?.then(() => screen.play());
       focusScreen.setPlaylist(clips);
+      // decode the next page's clips while this one is read, so the switch has nothing to wait for
+      const next = (el.nextElementSibling as HTMLElement | null)?.dataset.clips;
+      if (next) idle(() => FourScreen.preload(next.split(" ")).catch(() => {}));
     }
   },
   { rootMargin: "-45% 0px -50% 0px" },
@@ -171,6 +176,7 @@ document.querySelectorAll(".page, .machine").forEach((el) => io.observe(el));
 // ---- focus mode: the screen alone ----------------------------------------
 const dialog = document.querySelector<HTMLDialogElement>("#focus")!;
 const focusScreen = document.querySelector<FourScreen>("#focus-screen")!;
+focusScreen.pause(); // it plays only while the dialog is open
 document.querySelectorAll(".focus-btn").forEach((b) =>
   b.addEventListener("click", async () => {
     const clip = screen.clipId ?? "take";
@@ -184,6 +190,7 @@ document.querySelectorAll(".focus-btn").forEach((b) =>
 const closeFocus = () => {
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   dialog.close();
+  focusScreen.pause();
 };
 dialog.querySelector(".close")!.addEventListener("click", closeFocus);
 dialog.addEventListener("cancel", closeFocus);
