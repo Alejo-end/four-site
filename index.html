@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>four, a live sampler for norns</title>
-    <meta name="description" content="four is a live sampler for norns with four stereo tracks. Catch what your synth or drum machine plays, and the recording turns into a new instrument in your hands." />
+    <meta name="description" content="four is a live sampler for norns. Record your synth or drum machine onto four stereo tracks, then loop, stretch, grain and filter the takes as you play." />
     <meta name="theme-color" content="#08090b" />
     <meta property="og:title" content="four, a live sampler for norns" />
-    <meta property="og:description" content="Four stereo tracks of live sampling for norns, page by page." />
+    <meta property="og:description" content="Four stereo tracks of live sampling for norns, shown page by page on its real screen." />
     <meta property="og:image" content="poster.png" />
     <link rel="preload" href="model/case.glb" as="fetch" crossorigin />
   </head>
@@ -20,10 +20,10 @@
         <div class="stage-sticky">
           <div class="hero-copy">
             <h1 class="wordmark"><span data-px>four</span></h1>
-            <p class="lede">A live sampler for norns with four stereo tracks. Catch what your synth or drum machine plays, and the recording turns into a new instrument in your hands.</p>
+            <p class="lede">A live sampler for norns. Record your synth or drum machine onto four stereo tracks, then loop, stretch, grain and filter the takes as you play.</p>
             <p class="cue" aria-hidden="true">Scroll to put it together</p>
           </div>
-          <p class="note note-device">This is a pocket-sized version of the norns shield, built around a Raspberry Pi Compute Module 4. It is still in design. four runs on any norns.</p>
+          <p class="note note-device">The case is a pocket-sized version of the norns shield, built around a Raspberry Pi Compute Module 4, still in design. Today four runs on a norns shield with a Pi 4.</p>
           <p class="note note-on">Switch it on.</p>
         </div>
       </section>
@@ -38,20 +38,20 @@
         <div class="guide-text">
           <header class="guide-intro">
             <h2 id="guide-title">Twelve pages, three keys, three encoders</h2>
-            <p>E1 turns the page. K2, K3, E2 and E3 do what the bottom of the screen says, so the screen is the manual. Hold K1 for a second layer.</p>
+            <p>E1 turns the page. The bottom line of the screen names what K2, K3, E2 and E3 do there, and holding K1 swaps in a second set. Most keys latch on a tap. Hold one instead and it lets go when you do.</p>
           </header>
           <div id="pages"></div>
           <section class="moves" aria-labelledby="moves-title">
             <h2 id="moves-title">On every page</h2>
             <dl>
-              <div><dt>K1 + E1</dt><dd>Pick track 1 to 4. TAKE, VOICE, FILTER and EFFECT follow it.</dd></div>
-              <div><dt>K1 + K2</dt><dd>Stop everything, and start it again where it was.</dd></div>
-              <div><dt>K1 + K3</dt><dd>A tap turns every effect off. A long hold erases what the page holds.</dd></div>
+              <div><dt>K1 + E1</dt><dd>Pick the track, 1 to 4. TAKE, VOICE, FILTER and EFFECT edit that one.</dd></div>
+              <div><dt>K1 + K2</dt><dd>Stop everything. Do it again and every head picks up where it stopped.</dd></div>
+              <div><dt>K1 + K3</dt><dd>Tap to switch every effect off. Hold for a second to erase what the page holds: the take, the tape, the motion loop or the scenes.</dd></div>
             </dl>
           </section>
           <section class="machines" aria-labelledby="machines-title">
             <h2 id="machines-title">The machines</h2>
-            <p class="section-lede">Five voices make the sound. Four more machines play by themselves while your hands are busy.</p>
+            <p class="section-lede">The five voices decide how a track reads its take. The other four keep things moving while your hands are busy elsewhere.</p>
             <h3>The five voices</h3>
             <div id="voices"></div>
             <h3>Machines that play on their own</h3>
@@ -62,27 +62,27 @@
 
       <section id="inside" aria-labelledby="inside-title">
         <h2 id="inside-title">Inside four</h2>
-        <p class="section-lede">four runs on the SuperCollider engine of norns, with its own DSP written in C++ wherever the stock parts were too heavy or not good enough. All of it has to fit in one core of a Raspberry Pi 4.</p>
+        <p class="section-lede">four is a SuperCollider engine like any other norns script, plus a plugin of its own in C++ for the parts where the stock UGens were too heavy or not clean enough. scsynth gets one core of the Pi 4, and everything below shares it.</p>
         <h3>The path of a sound</h3>
         <ol class="flow" aria-label="The signal path of one track">
           <li><b>Input</b><span>Anything at line level, in stereo.</span></li>
-          <li class="per-track"><b>Take</b><span>Up to 60 seconds of stereo, one for each of the four tracks.</span></li>
+          <li class="per-track"><b>Take</b><span>Up to 60 seconds of stereo on each track.</span></li>
           <li class="per-track"><b>Voice</b><span>PLAY, GRAIN, WARP, PV or CLOUD.</span></li>
           <li class="per-track"><b>Filter</b><span>A diode ladder: low-pass, high-pass or band-pass.</span></li>
           <li class="per-track"><b>Colour</b><span>Drive and crush.</span></li>
-          <li class="per-track"><b>Effects</b><span>Two in a row: chorus, flanger, wobble, resonator, ring or echo.</span></li>
+          <li class="per-track"><b>Effects</b><span>Two slots in a row: chorus, flanger, wobble, resonator, ring or echo.</span></li>
           <li class="per-track"><b>Sends</b><span>To another track, the delay and the reverb.</span></li>
-          <li><b>Delay and reverb</b><span>A bucket brigade delay and a room, shared by every track.</span></li>
+          <li><b>Delay and reverb</b><span>A bucket brigade delay and a room, shared by all four tracks.</span></li>
           <li><b>Mix</b><span>The tracks against the tape loop, then a limiter.</span></li>
-          <li><b>Output</b><span>Stereo, at the level of the take when nothing is added.</span></li>
+          <li><b>Output</b><span>Stereo. With nothing added, at the level of the take.</span></li>
         </ol>
-        <p class="flow-note">The steps from the take to the sends run once for each track. The tape deck is softcut, norns' second audio engine, so the loop deck costs the main engine nothing.</p>
+        <p class="flow-note">Everything from the take to the sends runs once per track. The tape loop is softcut, which runs outside SuperCollider, so it costs the engine nothing.</p>
         <h3>The engine</h3>
         <dl class="facts">
-          <div><dt>Our own UGens</dt><dd>FourPV, FourWarp, FourRead, FourGrain, FourDelay, FourBBD, FourRoom and FourTanh, in one plugin. Without it, four builds stock voices and still plays.</dd></div>
-          <div><dt>What it costs</dt><dd>Measured on a Raspberry Pi 4 with reverb and delay on, four tracks of PLAY take 17% of the audio thread, four of GRAIN 19% and four of PV 29%. That leaves plenty of room to play.</dd></div>
-          <div><dt>Exact where it can be</dt><dd>At pitch 1 and speed 1, PLAY, WARP and PV return the take sample for sample, and a track leaves the engine at the level of its take.</dd></div>
-          <div><dt>Tested</dt><dd>The C++ cores have their own test program, and an offline check renders the real engine after every change and compares it with measured numbers.</dd></div>
+          <div><dt>Our own UGens</dt><dd>FourPV, FourWarp, FourRead, FourGrain, FourDelay, FourBBD, FourRoom and FourTanh, in one plugin that you build on the norns. Without it, four falls back to stock UGens and still plays.</dd></div>
+          <div><dt>What it costs</dt><dd>Measured on a Raspberry Pi 4 with the reverb and delay on: four PLAY tracks take 17% of the audio thread, four GRAIN tracks 19% and four PV tracks 29%.</dd></div>
+          <div><dt>Exact where it can be</dt><dd>At pitch 1 and speed 1, PLAY gives the take back sample for sample, and so do WARP and PV with the plugin. A track leaves the engine at the level it was recorded.</dd></div>
+          <div><dt>Tested</dt><dd>The C++ cores have their own test program. An offline check renders the real engine on a Mac and holds it to a list of measured targets. Some still fail, and the list says which.</dd></div>
         </dl>
         <h2 id="ideas-title" class="ideas-title">The ideas behind it</h2>
         <div id="ideas" class="ideas" aria-labelledby="ideas-title"></div>
@@ -90,7 +90,7 @@
 
       <section id="outro" aria-labelledby="install-title">
         <h2 id="install-title">Install</h2>
-        <p>In maiden, type this line, then select SYSTEM &gt; RESTART.</p>
+        <p>In maiden, type this line, then SYSTEM &gt; RESTART and pick four from SELECT.</p>
         <div class="install">
           <code id="install-line">;install https://github.com/Alejo-end/four</code>
           <button type="button" id="copy">Copy</button>
