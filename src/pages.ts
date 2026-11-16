@@ -181,10 +181,10 @@ export const PAGES: Page[] = [
     keys: [
       { key: "K2", word: "RCL", says: "Land the selected slot. Hold to peek, let go to come back." },
       { key: "K3", word: "CAP", says: "Capture the sound into the slot." },
-      { key: "E2", word: "SLOT", says: "Pick B, the right side of the fader." },
-      { key: "E3", word: "MORPH", says: "Fade between A and B, either way." },
+      { key: "E2", word: "A", says: "Pick A, the left side: LIVE or any stored slot." },
+      { key: "E3", word: "B", says: "Pick B, the right side. RCL and CAP act on it." },
     ],
-    shift: "Hold K1 and turn E2 to pick A, the left side: LIVE or any stored slot. The orbit's drift and reach are in PARAMS.",
+    shift: "Hold K1 and turn E3 to fade between A and B, either way. The orbit's drift and reach are in PARAMS.",
     picture: "The eight slots and the way back to where you started. The rail shows where the sound sits between A and B.",
     clips: ["scene"],
   },

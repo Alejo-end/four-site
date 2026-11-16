@@ -220,3 +220,5 @@ dialog#focus .close {
   #inside > * { max-width: none; }
   .machine { min-height: 60svh; }
 }
+.made { margin-top: 28px; color: var(--mute); font-size: 0.9rem; }
+.made a { color: var(--cap); }
